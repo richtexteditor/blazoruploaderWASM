@@ -1,0 +1,52 @@
+﻿@page "/docs/previewimage"
+
+<PageTitle>Docs_PreviewImage.razor</PageTitle>
+
+<h1>Preview uploaded image</h1>
+
+<p>Demo button: </p>
+
+<BlazorUploader.CoreUploader AcceptMimeTypes="image/*" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Upload a photo</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+@{
+	var lastfile = upstate.AllFiles.LastOrDefault(v => v.UserCancelled == false && v.UserError == null);
+	if (lastfile != null && lastfile.UserTempFilePath != null && lastfile.UserTotalReadSize == lastfile.FileSize)
+	{
+		var dataurl = "/UploadDemo/DownloadFile?clientid=" + lastfile.UserTempFilePath;
+
+		<div style="padding:12px;">
+			<div style="padding:12px 0">You have uploaded an image:</div>
+			<img src="@dataurl" style="max-width:256px;max-height:256px;box-shadow:0 2px 2px 5px #eee" />
+		</div>
+
+	}
+}
+
+<br />
+<br />
+
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+}
+
+<hr />
+
+<div class="docsection">Description</div>
+<p>This demo displays the uploaded contents.</p>
+
+

@@ -1,0 +1,278 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BlazorUploader</name>
+    </assembly>
+    <members>
+        <member name="T:BlazorUploader.UploaderLicenseFile">
+            <summary>
+            UploaderLicense
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.Country">
+            <summary>
+            Customer Country
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.Locale">
+            <summary>
+            Customer Country
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.Organization">
+            <summary>
+            Customer Organization
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.OrderID">
+            <summary>
+            Customer OrderID
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.ProductID">
+            <summary>
+            Product ID
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.ProductVersion">
+            <summary>
+            Product Version
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.LicenseType">
+            <summary>
+            Product License Type
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.Remotehost">
+            <summary>
+            Remote host
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.Remoteaddress">
+            <summary>
+            Remote address
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderLicenseFile.Expiresdatetime">
+            <summary>
+            Expires datetime
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderEvent.Uploader">
+            <summary>
+            Get Uploader instance
+            </summary>
+        </member>
+        <member name="F:BlazorUploader.UploaderRejectReason.InvalidFileType">
+            <summary>
+            Invalid mimetype or extension 
+            </summary>
+        </member>
+        <member name="F:BlazorUploader.UploaderRejectReason.InvalidFileSize">
+            <summary>
+            range out of the MinSizeKB or MaxSizeKB
+            </summary>
+        </member>
+        <member name="F:BlazorUploader.UploaderRejectReason.NoMoreFiles">
+            <summary>
+            When .Multiple is false, but drop too many files
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.Uploader">
+            <summary>
+            Get Uploader instance
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.FileId">
+            <summary>
+            Id starts from 8001
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.FileName">
+            <summary>
+            Get the short filename from browser
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.MimeType">
+            <summary>
+            Get the file mime type from browser
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.ClientRelativePath">
+            <summary>
+            Get the client side relative path if presented
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.RejectReason">
+            <summary>
+            If file is in rejectedList , get the reason.
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.FileSize">
+            <summary>
+            Get the size of the file , Int64 value
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.LastModified">
+            <summary>
+            Get the date of the file , Some browser may not provide it.
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserCancelled">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserKey">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserMessage">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserData">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserInt32">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserInt64">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserTempFilePath">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserReadStartTime">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserTotalReadTimes">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserTotalReadSize">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserTotalReadTimeSpan">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.UploaderFile.UserMaxReadLatency">
+            <summary>
+            Developer custom data, the BlazorUploader never read or write this property
+            </summary>
+        </member>
+        <member name="M:BlazorUploader.UploaderFile.OpenReadOnlyStream">
+            <summary>
+            Create a new Stream object for reading file data , use ReadAsync
+            </summary>
+            <returns>System.IO.Stream , can read , can seek</returns>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.UniqueId">
+            <summary>
+            Get the id 'BlazorUploader_63xxxxxxxxxxxxxxx' for &lt;blazor-uploader id='BlazorUploader_63xxxxxxxxxxxxxxx'&gt;
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.AcceptMimeTypes">
+            <summary>
+            set &lt;input type='file' accept='@AcceptMimeTypes'&gt;
+            accept one type : "image/*"
+            accept more types : "image/*,video/*,audio/*"
+            jpeg or png :  "image/jpeg,image/png"
+            zip file : "application/zip"
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.AcceptExtensions">
+            <summary>
+            if specified , will limit the files
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.MinSizeKB">
+            <summary>
+            Gets or sets the minimum allowed size of the file, in KB.
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.MaxSizeKB">
+            <summary>
+            Gets or sets the maximum allowed size of the file, in KB.
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.Multiple">
+            <summary>
+            Allow upload multiple files queue
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.WebkitDirectory">
+            <summary>
+            set &lt;input type='file' webkitdirectory &gt;
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.Capture">
+            <summary>
+            set &lt;input type='file' capture='@Capture'&gt;
+            user or environment
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.ChildContent">
+            <summary>
+            allow child contents for BlazorUploader tag
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.ButtonSelector">
+            <summary>
+            set the css-selector to find an element for attaching click-event to browser files , for example '#mybtn'
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.DragDropPanelSelector">
+            <summary>
+            set the css-selector to find an element for attaching file drop-event to accept files , for example 'body' for whole page
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.SelectorContainerSelector">
+            <summary>
+            For multiple uploader , each uploader UI has its own container
+            set the css-selector to find a contianer for ButtonSelector and DragDropPanelSelector
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.UploaderEvent">
+            <summary>
+            Get event from Uploader
+            </summary>
+        </member>
+        <member name="P:BlazorUploader.CoreUploader.MaxBufferSize">
+            <summary>
+            Set the ability of each chunk , suggest value is blazor SingleR MaximumReceiveMessageSize-4096 , default is 28K
+            </summary>
+        </member>
+        <member name="M:BlazorUploader.CoreUploader.CreateBuffer">
+            <summary>
+            Create byte[MaxBufferSize]
+            </summary>
+            <returns>new byte[MaxBufferSize]</returns>
+        </member>
+        <member name="M:BlazorUploader.CoreUploader.CreateBuffer(System.Int32)">
+            <summary>
+            Create byte[size] , if size is larger then MaxBufferSize , will use MaxBufferSize instead
+            </summary>
+            <param name="size"></param>
+            <returns>new byte[Math.min(size,MaxBufferSize)]</returns>
+        </member>
+    </members>
+</doc>

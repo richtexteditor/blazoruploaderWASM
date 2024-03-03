@@ -1,0 +1,160 @@
+﻿@page "/docs/savetoserver"
+
+<PageTitle>Docs_SaveToServer.razor</PageTitle>
+
+<h1>Docs_SaveToServer.razor</h1>
+
+<div class="docsection">1. OpenReadOnlyStream</div>
+<p>
+	In demo MyUploaderState.cs , use OpenReadOnlyStream to get a stream which allow developer read data from browser
+</p>
+<p>
+	The demo code do these jobs:
+</p>
+<ul>
+	<li>Open stream from browser</li>
+	<li>Save the upload start time</li>
+	<li>Get a server temp file path</li>
+	<li>Open the stream for temp file</li>
+	<li>loop to read data from browser</li>
+	<li>Check whether the file be cancelled by user or not</li>
+	<li>Save the state of reading file so can calculate percent/speed later</li>
+	<li>Send the StateHasChanged event every 0.2 second</li>
+	<li>Delete the temp file if cancelled or error throws</li>
+</ul>
+<div class="code">
+	<p align='left'>
+		<span style="color:black">&nbsp; &nbsp;&nbsp;</span><span style="color:blue">using</span><span style="color:black">
+			Stream s =
+			f.OpenReadOnlyStream();
+		</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp; DateTime
+			updatetime = DateTime.Now;
+		</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp; f.UserTotalReadSize
+			= 0;
+		</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp; f.UserReadStartTime
+			= DateTime.Now;
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:green">// server side id </span></p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp; f.UserTempFilePath
+			= f.Uploader.UniqueId +
+		</span><span style="color:#A31515">"-"</span><span style="color:black"> + f.FileId;</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:blue">try</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">while</span><span style="color:black"> (</span><span style="color:blue">true</span><span style="color:black">)</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sw.Restart();</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">int</span><span style="color:black"> rc = </span><span style="color:blue">await</span><span style="color:black">
+			s.ReadAsync(buffer,
+			0, buffer.Length);
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">if</span><span style="color:black"> (rc == 0)</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">break</span><span style="color:black">;</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">if</span><span style="color:black"> (f.UserCancelled)</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">break</span><span style="color:black">;</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">await</span><span style="color:black">
+			ChunkSender.SendChunkAsync(f,
+			buffer, 0, rc);
+		</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TimeSpan
+			latency = sw.Elapsed;
+		</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">if</span><span style="color:black">
+			(f.UserMaxReadLatency &lt; latency) f.UserMaxReadLatency = latency;
+		</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f.UserTotalReadSize
+			+= rc;
+		</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f.UserTotalReadTimeSpan
+			+= latency;
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f.UserTotalReadTimes++;</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">if</span><span style="color:black">
+			(DateTime.Now -
+			updatetime &gt; TimeSpan.FromSeconds(0.2))
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CurrentActionMsg
+			=
+		</span><span style="color:#A31515">"read "</span><span style="color:black"> + f.FileName + </span><span style="color:#A31515">" "</span><span style="color:black"> + f.UserTotalReadSize;</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; updatetime
+			= DateTime.Now;
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; InvokeStateHasChanged();</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; }</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:blue">catch</span><span style="color:black"> (Exception fx)</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f.UserError
+			= fx.Message;
+		</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">try</span><span style="color:black">
+			{ _ =
+			ChunkSender.DeleteFileAsync(f); }
+		</span><span style="color:blue">catch</span><span style="color:black"> { }</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">throw</span><span style="color:black">;</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; }</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:blue">if</span><span style="color:black"> (f.UserCancelled)</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">try</span><span style="color:black">
+			{ _ =
+			ChunkSender.DeleteFileAsync(f); }
+		</span><span style="color:blue">catch</span><span style="color:black"> { }</span>
+	</p>
+	<p><span style="color:black">&nbsp;&nbsp;&nbsp; }</span></p>
+
+</div>
+<p>
+	The file will be uploaded to server by  await ChunkSender.SendChunkAsync(f, buffer, 0, rc);
+</p>
+<p>
+	Check the /ChunkSender.cs , and Server side UploadDemoController.cs for more
+</p>
+<p>
+	&nbsp;
+</p>

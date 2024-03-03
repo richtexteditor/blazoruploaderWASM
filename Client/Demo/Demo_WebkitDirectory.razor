@@ -1,0 +1,107 @@
+﻿@page "/demo/webkitdirectory"
+
+<PageTitle>Demo_MultipleFiles.razor</PageTitle>
+
+<h1>Demo_MultipleFiles.razor</h1>
+
+<p>This demo shows how to uploading an entire folder. Users choose a folder, and all files in that folder will be uploaded.</p>
+
+<p>By setting Multiple="true" WebkitDirectory="true" the user can pick a folder and upload. </p>
+
+<BlazorUploader.CoreUploader Multiple="true" WebkitDirectory="true" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse folder</button>
+
+</BlazorUploader.CoreUploader>
+
+@* <MyListView_StyleA State="upstate" /> *@
+@{
+	var files = upstate.AllFiles.ToArray();
+}
+@if (files.Length != 0)
+{
+	int maxshowqueue = 3;
+
+	int uploadedcount = files.Where(v => v.UserTotalReadSize == v.FileSize).Count();
+
+	@foreach (var f in files)
+	{
+		if (f.UserCancelled)
+			continue;
+
+		if (f.UserTotalReadSize == f.FileSize)
+			continue;
+
+		maxshowqueue--;
+		if (maxshowqueue < 0)
+		{
+			break;
+		}
+
+		void DoCancelFile()
+		{
+			f.UserCancelled = true;
+			upstate.InvokeStateHasChanged();
+		}
+
+		string percent = "";
+		string width = "0";
+		string size = "0";
+		if (f.FileSize > 0)
+		{
+			width = (f.UserTotalReadSize * 100 / f.FileSize) + "";
+			percent = (f.UserTotalReadSize * 100 / f.FileSize) + "%";
+		}
+		if (f.FileSize > 1024 * 1024)
+		{
+			size = f.FileSize / 1024 / 1024 + "MB";
+		}
+		else if (f.FileSize > 1024)
+		{
+			size = f.FileSize / 1024 + "KB";
+		}
+		else
+		{
+			size = f.FileSize + "B";
+		}
+
+
+
+		if (f.Uploader == null)
+		{
+			<div class="bg-light text-black p-3 m-1 position-relative">
+				<div @onclick="DoCancelFile" class="position-absolute" style="top:5px;right:9px;cursor:pointer"><button type="button" class="btn-close" aria-label="Close"></button></div>
+				<div>@f.FileName</div>
+			</div>
+			continue;
+		}
+
+		<div class="bg-light text-black p-3 m-1 position-relative">
+			<p @onclick="DoCancelFile" class="position-absolute" style="right:9px;cursor:pointer"><button type="button" class="btn-close" aria-label="Close"></button></p>
+			<p>@f.FileName @size </p>
+
+			<div class="progress" role="progressbar" aria-label="@percent" aria-valuenow="@width" aria-valuemin="0" aria-valuemax="100" style="height: 20px">
+				<div class="progress-bar" style="width: @percent">@percent</div>
+			</div>
+		</div>
+
+
+	}
+
+
+	<div>Total Files : @files.Length , Uploaded : @uploadedcount</div>
+
+}
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

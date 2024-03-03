@@ -1,0 +1,52 @@
+﻿@page "/docs/myuploaderstate"
+
+<PageTitle>Docs_MyUploaderState.razor</PageTitle>
+
+<h1>Docs_MyUploaderState.razor</h1>
+
+<div class="docsection">1. About MyUploaderState</div>
+<p>MyUploaderState is an open source class in project file '/MyUploaderState.cs'.</p>
+<p>It's a default template for demonstrating <span class="fw-bold" style="color:red">how to process the file event and stream.</span></p>
+<p>It stores the primary server states. </p>
+
+<div class="docsection">2. Create an instance</div>
+<p>In the demo code, it's created like this: (/Demo/Demo_SimpleButton.razor)</p>
+<div class="code">
+	<p align='left'><span style="color:black">&#64;code {</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:#2B91AF">MyUploaderState</span><span style="color:black"> upstate = </span><span style="color:blue">new</span> <span style="color:#2B91AF">MyUploaderState</span><span style="color:black">();</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:blue">protected</span> <span style="color:blue">override</span> <span style="color:blue">void</span><span style="color:black"> OnInitialized()</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">base</span><span style="color:black">.OnInitialized();</span></p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; upstate.StateHasChanged
+			+= StateHasChanged;
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; }</span></p>
+	<p align='left'><span style="color:black">}</span></p>
+</div>
+
+<div class="docsection">3. Attach to CoreUploader</div>
+<p>By handling the FilesAdded and FilesError event: (/Demo/Demo_SimpleButton.razor)</p>
+<div class="code">
+	<p align='left'><span style="color:blue">&lt;</span><b><span style="color:purple">BlazorUploader.CoreUploader</span></b> <b><span style="color:purple">FilesAdded</span></b><span style="color:blue">="</span><span style="color:black">upstate.HandleFilesAdded</span><span style="color:blue">"</span> <b><span style="color:purple">FilesError</span></b><span style="color:blue">="</span><span style="color:black">upstate.HandleFilesError</span><span style="color:blue">"&gt;</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:blue">&lt;</span><span style="color:maroon">button</span> <span style="color:red">class</span><span style="color:blue">="btn btn-primary"&gt;</span><span style="color:black">Browse a file</span><span style="color:blue">&lt;/</span><span style="color:maroon">button</span><span style="color:blue">&gt;</span></p>
+	<p><span style="color:blue">&lt;/</span><b><span style="color:purple">BlazorUploader.CoreUploader</span></b><span style="color:blue">&gt;</span></p>
+</div>
+<p>
+	The HandleFilesAdded and HandleFilesError will add selected files to MyUploaderState.AllFiles and MyUploaderState.ErrFiles.
+</p>
+<p>
+	In this demo application, 
+	when FilesAdded occurs, HandleFilesAdded will run MyUploaderState.ProcessFilesAsync() and read file data and save to Program.UploadDemoTempDir.
+</p>
+<p>
+	Developer can modify MyUploaderState.ProcessFilesAsync() and save the file data to anywhere they want.
+</p>
+
+
+
+
+
+

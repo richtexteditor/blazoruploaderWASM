@@ -1,0 +1,30 @@
+﻿@page "/demo/imagebutton"
+
+<PageTitle>Demo_ImageButton.razor</PageTitle>
+
+<h1>Demo_ImageButton.razor</h1>
+
+<p>Customizable image button</p>
+
+<p>You can use any button/image/link/etc.., which will listen to click event.</p>
+
+<BlazorUploader.CoreUploader UploaderEvent="upstate.HandleUploaderEvent">
+
+	<img src="images/upload_button.png" style="width:128px;cursor:pointer">
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

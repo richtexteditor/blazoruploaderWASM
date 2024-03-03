@@ -1,0 +1,140 @@
+﻿@if (State.ErrFiles.Count != 0)
+{
+	var errfile = State.ErrFiles.Last();
+	string errormsg = "";
+	switch (errfile.RejectReason)
+	{
+		case BlazorUploader.UploaderRejectReason.InvalidFileSize:
+			errormsg = "The file you selected is too big!";
+			break;
+		case BlazorUploader.UploaderRejectReason.InvalidFileType:
+			errormsg = "The file you selected is wrong type!";
+			break;
+		case BlazorUploader.UploaderRejectReason.NoMoreFiles:
+			errormsg = "Not allow so much files!";
+			break;
+		default:
+			if (errfile.UserError != null)
+				errormsg = errfile.UserError;
+			else
+				errormsg = "You have selected an invalid file!";
+			break;
+	}
+
+	void ClearErrorFiles()
+	{
+		State.ErrFiles.Clear();
+		State.InvokeStateHasChanged();
+	}
+
+	<div class="bg-warning text-info p-3 m-1 position-relative">
+		<div @onclick="ClearErrorFiles" class="position-absolute" style="top:5px;right:9px;cursor:pointer">X</div>
+		<div>@errfile.FileName</div>
+		<div class="text-danger">@errormsg</div>
+	</div>
+}
+
+@if (State.AllFiles.Count != 0)
+{
+
+	@foreach (var f in State.AllFiles)
+	{
+		if (f.UserCancelled)
+			continue;
+
+		void DoCancelFile()
+		{
+			f.UserCancelled = true;
+			ItemCancelled.InvokeAsync(f);
+			State.InvokeStateHasChanged();
+		}
+
+		string percent = "";
+		string width = "0";
+		string size = "0";
+		if (f.FileSize > 0)
+		{
+			width = (f.UserTotalReadSize * 100 / f.FileSize) + "";
+			percent = (f.UserTotalReadSize * 100 / f.FileSize) + "%";
+		}
+		if (f.FileSize > 1024 * 1024)
+		{
+			size = f.FileSize / 1024 / 1024 + "MB";
+		}
+		else if (f.FileSize > 1024)
+		{
+			size = f.FileSize / 1024 + "KB";
+		}
+		else
+		{
+			size = f.FileSize + "B";
+		}
+
+
+		@* developer self add item via code : *@
+		if (f.Uploader == null)
+		{
+			<div class="bg-light text-black p-3 m-1 position-relative">
+				<p @onclick="DoCancelFile" class="position-absolute" style="right:9px;cursor:pointer"><button type="button" class="btn-close" aria-label="Close"></button></p>
+				<p>@f.FileName</p>
+			</div>
+			continue;
+		}
+
+		<div class="bg-light text-black p-3 m-1 position-relative">
+			<p @onclick="DoCancelFile" class="position-absolute" style="right:9px;cursor:pointer"><button type="button" class="btn-close" aria-label="Close"></button></p>
+			<p>
+				@f.FileName @size
+				@if (f.UserTotalReadSize == f.FileSize)
+				{
+					var dataurl = "/UploadDemo/DownloadFile?clientid=" + f.UserTempFilePath;
+
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill text-primary mx-2" viewBox="0 0 16 16">
+						<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+					</svg>
+
+					@* <span class="oi oi-circle-check text-primary mx-2"></span> *@
+
+					@*
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg text-primary mx-2" viewBox="0 0 16 16">
+		<path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
+		</svg>
+		*@
+
+					<a target="_blank" href="@dataurl">download from server</a>
+
+				}
+				else if (!string.IsNullOrEmpty(f.UserError))
+				{
+					<span class="text-warning">@f.UserError</span>
+				}
+				else if (f.UserTotalReadSize > 0)
+				{
+					TimeSpan ts = DateTime.Now - f.UserReadStartTime;
+					double bps = f.UserTotalReadSize / Math.Max(ts.TotalSeconds, 0.5);
+					int kbps = (int)(bps / 1024);
+					<span class="text-info"> ( @kbps KB/s ) </span>
+				}
+			</p>
+
+			<div class="progress" role="progressbar" aria-label="@percent" aria-valuenow="@width" aria-valuemin="0" aria-valuemax="100" style="height: 20px">
+				<div class="progress-bar" style="width: @percent">@percent</div>
+			</div>
+		</div>
+
+
+	}
+
+}
+
+
+@code {
+
+	[Parameter]
+	public MyUploaderState State { get; set; }
+
+
+	[Parameter]
+	public EventCallback<BlazorUploader.UploaderFile> ItemCancelled { get; set; }
+
+}

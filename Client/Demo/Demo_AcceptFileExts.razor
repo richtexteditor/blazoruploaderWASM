@@ -1,0 +1,31 @@
+﻿@page "/demo/acceptextensions"
+
+<PageTitle>AcceptExtensions.razor</PageTitle>
+
+<h1>AcceptExtensions.razor</h1>
+
+<p>This demo shows how to use the AcceptExtensions property allow only specific file extensions for upload.</p>
+
+
+<p>AcceptExtensions="doc,docx,xls,xlsx,ppt,pptx,zip" AcceptMimeTypes="video/*"</p>
+
+<BlazorUploader.CoreUploader AcceptMimeTypes="video/*" AcceptExtensions="doc,docx,xls,xlsx,ppt,pptx,zip" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse a office file or zip file or video files</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

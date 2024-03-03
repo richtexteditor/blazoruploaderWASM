@@ -1,0 +1,33 @@
+﻿@page "/demo/initialfiles"
+
+<PageTitle>Demo_InitialFiles.razor</PageTitle>
+
+<h1>Demo_InitialFiles.razor</h1>
+
+<p>Initial Files</p>
+
+<p>Add existing items to the list and allow user to remove them.</p>
+
+<BlazorUploader.CoreUploader Multiple="true" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Upload</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+
+		upstate.AllFiles.Add(new BlazorUploader.UploaderFile() { FileName = "test1.png" });
+		upstate.AllFiles.Add(new BlazorUploader.UploaderFile() { FileName = "test2.zip" });
+	}
+
+}

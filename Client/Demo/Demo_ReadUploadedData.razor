@@ -1,0 +1,66 @@
+﻿@page "/demo/readuploadeddata"
+
+<PageTitle>Demo_ReadUploadedData.razor</PageTitle>
+
+<h1>Demo_ReadUploadedData.razor</h1>
+
+<p>This demo illustrates how to read uploaded data.</p>
+
+<p>Upload files and then click the submit button.</p>
+
+<BlazorUploader.CoreUploader Multiple="true" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse files</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}
+
+
+<br />
+<br />
+<button @onclick="ShowData" class="btn btn-primary">Show Data</button>
+
+<br />
+<pre>@datamsg</pre>
+@code {
+
+	string datamsg = "";
+	void ShowData()
+	{
+		if (upstate.UploadStarted)
+		{
+			datamsg = "Uploading. try again after finishing.";
+		}
+		else
+		{
+			var validfiles = upstate.AllFiles.Where(v => v.UserCancelled == false && v.UserError == null).ToArray();
+			if (validfiles.Length == 0)
+			{
+				datamsg = "Please select files.";
+			}
+			else
+			{
+				datamsg = "You have upload " + validfiles.Length + " files \r\n";
+				foreach (var f in validfiles)
+				{
+					datamsg += "server id : " + f.UserKey + " : " + f.FileName + "\r\n";
+				}
+			}
+		}
+		datamsg = DateTime.Now.ToLongTimeString() + " " + datamsg;
+	}
+}

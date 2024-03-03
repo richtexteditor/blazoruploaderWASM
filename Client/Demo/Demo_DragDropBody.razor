@@ -1,0 +1,38 @@
+﻿@page "/demo/dragdropbody"
+
+<PageTitle>Demo_DragDropBody.razor</PageTitle>
+
+<h1>Demo_DragDropBody.razor</h1>
+
+
+<p>This demo shows how to implement the powerful Drag-and-Drop feature for the whole page in Blazor Uploader. It allows the user to drag a file directly into drop zone without the use of file dialog.</p>
+
+<p>By setting DragDropPanelSelector="body", uploader will listen drop drop event for whole page.</p>
+
+<BlazorUploader.CoreUploader DragDropPanelSelector="body" UploaderEvent="upstate.HandleUploaderEvent">
+
+
+	<div class="text-center" style="width:750px;background-color:#f8fafd;border:.125rem dashed rgba(33,50,91,.1);padding:3rem 3rem;display:flex;flex-wrap:wrap">
+		<div class="card-body">
+			<p><img src="images/upload_button2.png" style="width:128px;cursor:pointer"></p>
+			<h5 class="card-title">Drag and drop your file any where in whole page</h5>
+			<p class="mb-2">or</p>
+			<span class="btn btn-outline-secondary">Browse files</span>
+		</div>
+	</div>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

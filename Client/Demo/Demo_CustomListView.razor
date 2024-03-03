@@ -1,0 +1,30 @@
+﻿@page "/demo/customlistview"
+
+<PageTitle>Demo_CustomListView.razor</PageTitle>
+
+<h1>Demo_CustomListView.razor</h1>
+
+<p>A sample demonstrating how to customize the look and feel of Blazor Uploader List View. The list view code is open source. You can easily to create a custom List View.</p>
+
+<p>This page uses MyListView_StyleB instead of MyListView_StyleA.</p>
+
+<BlazorUploader.CoreUploader Multiple="true" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse files</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleB State="upstate" />
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

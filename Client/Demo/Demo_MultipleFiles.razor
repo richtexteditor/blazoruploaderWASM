@@ -1,0 +1,28 @@
+﻿@page "/demo/multiplefiles"
+
+<PageTitle>Demo_MultipleFiles.razor</PageTitle>
+
+<h1>Demo_MultipleFiles.razor</h1>
+
+<p>In this demo, users can select multiple files in the file browser dialog then upload them at once by setting Multiple="true".</p>
+
+<BlazorUploader.CoreUploader Multiple="true" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse files</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

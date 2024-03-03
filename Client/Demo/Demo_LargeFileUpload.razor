@@ -1,0 +1,30 @@
+﻿@page "/demo/LargeFileUpload"
+
+<PageTitle>Demo_LargeFileUpload.razor</PageTitle>
+
+<h1>Demo_LargeFileUpload.razor</h1>
+
+<p>This demo illustrates how to upload large files in chunks and process these chunks on the server.</p>
+
+<p>By default, BlazorUploader supports uploading unlimited file size!</p>
+
+<BlazorUploader.CoreUploader Multiple="true" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse a file up to xxxxx GB!</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

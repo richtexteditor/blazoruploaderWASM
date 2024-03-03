@@ -1,0 +1,29 @@
+﻿@page "/demo/simplebutton"
+
+<PageTitle>Demo_SimpleButton.razor</PageTitle>
+
+<h1>Demo_SimpleButton.razor</h1>
+
+<p>A basic sample demonstrating the use of the Blazor Uploader control.</p>
+
+<p>You can use any button/image/link/etc.., which will listen to click event.</p>
+
+<BlazorUploader.CoreUploader UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse a file</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+}

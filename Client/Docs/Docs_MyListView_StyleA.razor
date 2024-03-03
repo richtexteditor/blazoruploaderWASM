@@ -1,0 +1,59 @@
+﻿@page "/docs/mylistview_stylea"
+
+<PageTitle>Docs_MyListView_StyleA.razor</PageTitle>
+
+<h1>Docs_MyListView_StyleA.razor</h1>
+
+<div class="docsection">1. About MyListView_StyleA</div>
+<p>MyListView_StyleA is an open source UI in project file '/MyListView_StyleA.razor'</p>
+<p>It's a default template for demostrating how to render the file list UI and show progress and handle remove button.</p>
+<p>There's another /MyListView_StyleB.razor which show different style.</p>
+<p>Developer can make custom listview easily by referencing /MyListView_StyleA.razor.</p>
+
+
+<div class="docsection">2. Attach MyUploaderState</div>
+<p>In the demo code, it shows the data for MyUploaderState like this: (/Demo/Demo_SimpleButton.razor).</p>
+<div class="code">
+	<p><span style="color:blue">&lt;</span><b><span style="color:purple">MyListView_StyleA</span></b> <b><span style="color:purple">State</span></b><span style="color:blue">="</span><span style="color:black">upstate</span><span style="color:blue">" /&gt;</span></p>
+</div>
+
+<div class="docsection">3. Understand how it renders UI</div>
+<p>In /MyListView_StyleA.razor, it shows 2 part:</p>
+<p class="fw-bold"> 1 - The State.ErrFiles </p>
+<p>
+	When the selected files is not accepted for any reason, it will be added into ErrFiles.
+	The demo ListView shows the error details for last one, and allow user clear it.
+</p>
+<p>
+	Visit <a href="/demo/maxsizekb">Demo Demo_MaxSizeKB</a> and try it.
+</p>
+<p class="fw-bold"> 2 - The State.AllFiles </p>
+<p>
+	When user select files or drag drop files, and not rejected by AcceptMaxFile/AcceptMimeType/AcceptExtensions/Multiple="false" etc,
+	The files will be added into State.AllFiles .
+</p>
+<p>
+	And then MyUploaderState.ProcessFilesAsync() will upload them automatically. In ProcessFilesAsync, the f.UserTotalReadSize will be set so the ListView can calculate the upload progress.
+	The f.UserReadStartTime also will be set so developer can calcuate the upload speed. (Check <a href="demo/customlistview">/demo/customlistview</a>)
+</p>
+
+<div class="docsection">4. Remove a file from the list</div>
+<p>
+	By setting UserCancelled in DoCancelFile(): (/MyListView_StyleA.razor)
+</p>
+<div class="code">
+	<p align='left'><span style="color:blue">void</span><span style="color:black"> DoCancelFile()</span></p>
+	<p align='left'><span style="color:black">{</span></p>
+	<p align='left'>
+		<span style="color:black">
+			&nbsp;&nbsp;&nbsp; f.UserCancelled
+			=
+		</span><span style="color:blue">true</span><span style="color:black">;</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; ItemCancelled.InvokeAsync(f);</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; State.InvokeStateHasChanged();</span></p>
+	<p><span style="color:black">}</span></p>
+</div>
+<p>
+	After UserCancelled is set to true, the MyUploaderState.ProcessFilesAsync() will bypass that file and try next files.
+</p>

@@ -1,0 +1,44 @@
+﻿@page "/docs/setup"
+
+<PageTitle>Docs_Setup.razor</PageTitle>
+
+<h1>Docs_Setup.razor</h1>
+
+<div class="docsection">1. Get BlazorUploader.dll </div>
+<p>Find the BlazorUploader.dll from downloaded package, add reference to Blazor project </p>
+
+
+<div class="docsection">2. Program Startup code</div>
+
+<p>Get the license file and install the license file like this way :</p>
+<pre class="code">
+	using var licstream = typeof(Program).Assembly.GetManifestResourceStream("BlazorUploaderDemoWasm.Client.BlazorUploader.demo.lic");
+	BlazorUploader.CoreUploader.InstallLicense(licstream);
+</pre>
+<p>In the blazor server startup function , add this code to make upload faster : (/Program.cs) </p>
+<pre class="code">
+	BlazorUploader.CoreUploader.MaxBufferSize = 2048 * 1024;
+</pre>
+
+
+<div class="docsection">3. Add uploader button</div>
+<p>
+	In the razor UI code, put BlazorUploader.CoreUploader like this way : (/Demo/Demo_SimpleButton.razor)
+</p>
+<div class="code">
+	<p align='left'><span style="color:blue">&lt;</span><b><span style="color:purple">BlazorUploader.CoreUploader</span></b><span style="color:blue">&gt;</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:blue">&lt;</span><span style="color:maroon">button</span> <span style="color:red">class</span><span style="color:blue">="btn btn-primary"&gt;</span><span style="color:black">Browse a file</span><span style="color:blue">&lt;/</span><span style="color:maroon">button</span><span style="color:blue">&gt;</span></p>
+	<p><span style="color:blue">&lt;/</span><b><span style="color:purple">BlazorUploader.CoreUploader</span></b><span style="color:blue">&gt;</span></p>
+</div>
+
+<p>
+	The uploader button will display but it would not process files yet.
+</p>
+<p>
+	<BlazorUploader.CoreUploader>
+		<button class="btn btn-primary">Browse a file</button>
+	</BlazorUploader.CoreUploader>
+</p>
+<p>
+	<a href="/docs/myuploaderstate">Next section : process file stream</a>
+</p>

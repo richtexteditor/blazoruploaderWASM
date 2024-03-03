@@ -1,0 +1,168 @@
+﻿@if (State.ErrFiles.Count != 0)
+{
+	var errfile = State.ErrFiles.Last();
+	string errormsg = "";
+	switch (errfile.RejectReason)
+	{
+		case BlazorUploader.UploaderRejectReason.InvalidFileSize:
+			errormsg = "The file you selected is too big!";
+			break;
+		case BlazorUploader.UploaderRejectReason.InvalidFileType:
+			errormsg = "The file you selected is wrong type!";
+			break;
+		case BlazorUploader.UploaderRejectReason.NoMoreFiles:
+			errormsg = "Not allow so much files!";
+			break;
+		default:
+			if (errfile.UserError != null)
+				errormsg = errfile.UserError;
+			else
+				errormsg = "You have selected an invalid file!";
+			break;
+	}
+
+	void ClearErrorFiles()
+	{
+		State.ErrFiles.Clear();
+		State.InvokeStateHasChanged();
+	}
+
+	<div class="bg-warning text-info p-3 m-1 position-relative">
+		<div @onclick="ClearErrorFiles" class="position-absolute" style="top:5px;right:9px;cursor:pointer">X</div>
+		<div>@errfile.FileName</div>
+		<div class="text-danger">@errormsg</div>
+	</div>
+}
+
+@if (State.AllFiles.Count != 0)
+{
+	<table style="margin:20px 2px;width:100%;" class="table-bordered">
+		<tr style="background-color:steelblue;color:white">
+			<td>Id</td>
+			<td>Name</td>
+			<td style="text-align:right">Size</td>
+			<td style="text-align:right">Uploaded</td>
+			<td style="text-align:right">Latency</td>
+			<td style="text-align:right">Speed</td>
+			<td style="text-align:right">Status</td>
+			<td style="text-align:center;width:300px;">progress</td>
+			<td>remove</td>
+		</tr>
+		@foreach (var f in State.AllFiles)
+		{
+			if (f.UserCancelled)
+				continue;
+
+			void DoCancelFile()
+			{
+				f.UserCancelled = true;
+				ItemCancelled.InvokeAsync(f);
+				State.InvokeStateHasChanged();
+			}
+
+			if (f.Uploader == null)
+			{
+				<tr>
+					<td></td>
+					<td colspan="7">@f.FileName</td>
+					<td><button class="btn btn-info" @onclick="DoCancelFile">remove</button></td>
+				</tr>
+				continue;
+			}
+
+			string percent = "";
+			string width = "0";
+			string size = "0";
+			if (f.FileSize > 0)
+			{
+				width = (f.UserTotalReadSize * 100 / f.FileSize) + "";
+				percent = (f.UserTotalReadSize * 100 / f.FileSize) + "%";
+			}
+			if (f.FileSize > 1024 * 1024)
+			{
+				size = f.FileSize / 1024 / 1024 + "MB";
+			}
+			else if (f.FileSize > 1024)
+			{
+				size = f.FileSize / 1024 + "KB";
+			}
+			else
+			{
+				size = f.FileSize + "B";
+			}
+
+			<tr>
+				<td>@f.FileId</td>
+				<td>@f.FileName</td>
+				<td style="text-align:right">@(f.FileSize / 1024 / 1024)MB</td>
+				<td style="text-align:right">@(f.UserTotalReadSize / 1024 / 1024)MB</td>
+				@if (f.UserError != null)
+				{
+					<td colspan="3" class="text-danger">
+						@f.UserError
+					</td>
+				}
+				else
+				{
+					<td style="text-align:right">
+						@if (f.UserTotalReadTimes > 0)
+						{
+							@((f.UserTotalReadTimeSpan.TotalMilliseconds / f.UserTotalReadTimes).ToString("0"))
+							<span>/</span>
+							@(f.UserMaxReadLatency.TotalMilliseconds.ToString("0"))
+							<span> ms</span>
+						}
+					</td>
+					<td style="text-align:right">
+						@if (f.UserTotalReadTimeSpan.TotalMilliseconds > 0)
+						{
+							double kbps = f.UserTotalReadSize / f.UserTotalReadTimeSpan.TotalSeconds / 1024;
+							if (kbps > 10000)
+							{
+								@((kbps / 1024).ToString("0 MB/s"))
+							}
+							else
+							{
+								@(kbps.ToString("0 KB/s"))
+							}
+						}
+					</td>
+					<td style="text-align:right">
+						@if (f.FileSize == 0)
+						{
+							<span>(empty)</span>
+						}
+						else
+						{
+							@(f.UserTotalReadSize * 100 / f.FileSize)
+							<span>%</span>
+						}
+					</td>
+				}
+
+				<td style="background-color:#fff;">
+					<div class="progress" role="progressbar" aria-label="@percent" aria-valuenow="@width" aria-valuemin="0" aria-valuemax="100" style="height: 20px">
+						<div class="progress-bar" style="width: @percent">@percent</div>
+					</div>
+				</td>
+				<td>
+					<button type="button" class="btn-close" aria-label="Close" @onclick="DoCancelFile"></button>
+				</td>
+			</tr>
+
+		}
+	</table>
+
+}
+
+
+@code {
+
+	[Parameter]
+	public MyUploaderState State { get; set; }
+
+
+	[Parameter]
+	public EventCallback<BlazorUploader.UploaderFile> ItemCancelled { get; set; }
+
+}

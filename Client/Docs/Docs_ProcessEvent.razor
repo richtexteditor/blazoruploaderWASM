@@ -1,0 +1,91 @@
+﻿@page "/docs/processevent"
+
+<PageTitle>Docs_ProcessEvent.razor</PageTitle>
+
+<h1>Docs_ProcessEvent.razor</h1>
+
+<div class="docsection">1. CoreUploader.UploaderEvent</div>
+<p>
+	The CoreUploader has an event named UploaderEvent , when user browse or drop files the event will be fired , handle it like this :
+</p>
+<div class="code">
+	<p align='left'><span style="color:blue">&lt;</span><b><span style="color:purple">BlazorUploader.CoreUploader</span></b> <b><span style="color:purple">Multiple</span></b><span style="color:blue">="true"</span> <b><span style="color:purple">UploaderEvent</span></b><span style="color:blue">="</span><span style="color:black">HandleUploaderEvent</span><span style="color:blue">"&gt;</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:blue">&lt;</span><span style="color:maroon">button</span> <span style="color:red">class</span><span style="color:blue">="btn btn-primary"&gt;</span><span style="color:black">Upload</span><span style="color:blue">&lt;/</span><span style="color:maroon">button</span><span style="color:blue">&gt;</span></p>
+	<p><span style="color:blue">&lt;/</span><b><span style="color:purple">BlazorUploader.CoreUploader</span></b><span style="color:blue">&gt;</span></p>
+</div>
+<p>
+	In custom code , the BlazorUploader.UploaderFile object provide FileName,FileSize,MimeType, OpenReadOnlyStream etc.
+</p>
+<div class="code">
+	<p align='left'><span style="color:black">&#64;code{</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp; </span><span style="color:blue">void</span><span style="color:black">
+			HandleUploaderEvent(BlazorUploader.
+		</span><span style="color:#2B91AF">UploaderEvent</span><span style="color:black"> eventData)</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">if</span><span style="color:black">
+			(eventData.FilesError.Length != 0)
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:green">
+			// file has been rejected for
+			MaxSizeKB/AcceptMimeTypes/AcceptExtensions etc..
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:green">// developer shall show error , or ignore it.</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">if</span><span style="color:black">
+			(eventData.FilesAdded.Length != 0)
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">foreach</span><span style="color:black"> (BlazorUploader.</span><span style="color:#2B91AF">UploaderFile</span><span style="color:black"> file </span><span style="color:blue">in</span><span style="color:black">
+			eventData.FilesAdded)
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:green">//manually validate the file.</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">string</span><span style="color:black">
+			name =
+			file.FileName;
+		</span>
+	</p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">long</span><span style="color:black">
+			size =
+			file.FileSize;
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:green">//read data from the stream</span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:blue">using</span> <span style="color:#2B91AF">Stream</span><span style="color:black">
+			livestream =
+			file.OpenReadOnlyStream();
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+	<p align='left'>
+		<span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="color:green">
+			//for more details , check the /MyUploaderState.cs in the
+			demo project
+		</span>
+	</p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+	<p align='left'><span style="color:black">&nbsp;&nbsp;&nbsp; }</span></p>
+	<p><span style="color:black">}</span></p>
+
+</div>
+<p>
+	for more details , check the /MyUploaderState.cs in the demo project
+</p>
+<p>
+	<a href="/docs/myuploaderstate">Next section : MyUploadState</a>
+</p>

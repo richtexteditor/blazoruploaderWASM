@@ -1,0 +1,77 @@
+﻿@page "/docs/submitstate"
+
+<PageTitle>Docs_SubmitState.razor</PageTitle>
+
+<h1>Check whether form is ready to be submitted or not.</h1>
+
+<p>Demo button: </p>
+
+<BlazorUploader.CoreUploader Multiple="true" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse files</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+<br />
+<br />
+
+@if (upstate.UploadStarted)
+{
+	<button class="btn btn-primary" disabled>Submit Form</button>
+	<span>(Please wait file uploading)</span>
+}
+else
+{
+	var validfiles = upstate.AllFiles.Where(v => v.UserCancelled == false && v.UserError == null).ToArray();
+	if (validfiles.Length == 0)
+	{
+		<button class="btn btn-primary" disabled>Submit Form</button>
+		<span>(Please browse files)</span>
+	}
+	else if (validfiles.Length < 3)
+	{
+		<button class="btn btn-primary" disabled>Submit Form</button>
+		<span>(Please upload at lease 3 files)</span>
+	}
+	else
+	{
+		<button @onclick="ShowUploadedFiles" class="btn btn-primary">Submit Form</button>
+		<span>(READY)</span>
+	}
+}
+
+<pre>@uploadedinfo</pre>
+
+
+@code {
+
+	string uploadedinfo = "";
+	void ShowUploadedFiles()
+	{
+		var validfiles = upstate.AllFiles.Where(v => v.UserCancelled == false && v.UserError == null).ToArray();
+		uploadedinfo = "These files have been uploaded to server: \r\n";
+		foreach (var f in validfiles)
+		{
+			uploadedinfo += f.UserTempFilePath + " : " + f.FileName + "\r\n";
+		}
+	}
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+}
+
+<hr />
+
+<div class="docsection">Description</div>
+<p>This demo requires user upload at lease 3 files.</p>
+<p>The button will not allow be clicked untile all files are uploaded.</p>
+<p>Developer can know the status by checking upstate.UploadStarted and upstate.AllFiles. </p>
+
+

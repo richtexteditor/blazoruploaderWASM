@@ -1,0 +1,36 @@
+﻿@page "/demo/dragdroparea5"
+
+<PageTitle>Demo_DragDropArea.razor</PageTitle>
+
+<h1>Demo_DragDropArea.razor</h1>
+
+
+<p>This demo shows how to implement the powerful Drag-and-Drop feature in Blazor Uploader. It allows the user to drag a file directly into drop zone without the use of file dialog.</p>
+
+<p>The child content auto accepts the browser Drag Drop event.</p>
+
+<BlazorUploader.CoreUploader Multiple="true" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<div class="text-center" style="width:700px;background-color:#f8fafd;border:.25rem dashed rgba(33,50,91,.1);padding:3rem 3rem;display:flex;flex-wrap:wrap">
+		<div class="card-body">
+			<h5 class="card-title"><img src="images/upload_button2.png" style="width:48px;cursor:pointer"> Drop your file here</h5>
+		</div>
+	</div>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

@@ -1,0 +1,54 @@
+﻿@page "/docs/validation"
+
+<PageTitle>Docs_Validation.razor</PageTitle>
+
+<h1>Docs_Validation.razor</h1>
+
+<div class="docsection">1. Validation Concept</div>
+<p>
+	There are 3 Validation properties for &lt;CoreUploader&gt;
+</p>
+<ul>
+	<li><a href="/demo/maxsizekb">MaxSizeKB</a></li>
+	<li><a href="/demo/acceptmimetypes">AcceptMimeTypes</a></li>
+	<li><a href="/demo/acceptextensions">AcceptExtensions</a></li>
+</ul>
+<p>
+	If files don't match the properties, the CoreUploader.FilesError event will be fired.
+</p>
+<p>
+	If both AcceptMimeTypes and AcceptExtensions are set, the files only need matchs one of them.
+</p>
+<p>
+	AcceptMimeTypes and AcceptExtensions will work for most browsers and the selected file dialog will hide invalid files.
+</p>
+
+<div class="docsection">2. MinSizeKB/MaxSizeKB (in bytes)</div>
+<p>
+	This property sets the maximum allowed size of the file, in bytes.
+	set MaxSizeKB="200" means 200KB.
+</p>
+
+
+<div class="docsection">3. AcceptMimeTypes</div>
+<p>
+	This property can be set to one or multiple values like this :
+	AcceptMimeTypes="image/*,video/*"
+</p>
+
+<div class="docsection">4. AcceptExtensions</div>
+<p>
+	This property can be set to one or multiple values like this :
+	AcceptExtensions="doc,docx,xls,xlsx,ppt,pptx,zip"
+</p>
+
+<div class="docsection">5. Custom Validation before upload</div>
+<p>
+	Developer can modify HandleFilesAdded to put invalid files to ErrFiles.
+</p>
+
+<div class="docsection">6. Custom Validation after upload</div>
+<p>
+	Developer can modify ProcessFilesAsync to check file content after file be uploaded.
+</p>
+

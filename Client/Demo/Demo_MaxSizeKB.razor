@@ -1,0 +1,31 @@
+﻿@page "/demo/maxsizekb"
+
+<PageTitle>Demo_MaxSizeKB.razor</PageTitle>
+
+<h1>Demo_MaxSizeKB.razor</h1>
+
+<p>This demo demonstrates how to use the MaxSizeKB property to define the maximum file size in bytes allowed for upload.</p>
+
+<p>In this example, maximum file size allowed is 200K by setting MaxSizeKB="200".</p>
+
+<BlazorUploader.CoreUploader MinSizeKB="10" MaxSizeKB="2000" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse a file</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

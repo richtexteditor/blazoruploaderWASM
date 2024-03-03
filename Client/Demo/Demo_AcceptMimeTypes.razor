@@ -1,0 +1,31 @@
+﻿@page "/demo/acceptmimetypes"
+
+<PageTitle>AcceptMimeTypes.razor</PageTitle>
+
+<h1>AcceptMimeTypes.razor</h1>
+
+<p>This demo shows how to use the AcceptMimeTypes property allow only specific file mime types for upload.</p>
+
+<p>In this example, the allowed file mime types are videos and photos by setting AcceptMimeTypes="image/*,video/*".</p>
+
+<BlazorUploader.CoreUploader AcceptMimeTypes="image/*,video/*" UploaderEvent="upstate.HandleUploaderEvent">
+
+	<button class="btn btn-primary">Browse a photo or video</button>
+
+</BlazorUploader.CoreUploader>
+
+<MyListView_StyleA State="upstate" />
+
+
+
+@code {
+
+	MyUploaderState upstate = new MyUploaderState();
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		upstate.StateHasChanged += StateHasChanged;
+	}
+
+}

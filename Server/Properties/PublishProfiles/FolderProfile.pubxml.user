@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\temp\BlazorUploaderDemoWasm\Server\bin\Release\net8.0\publish\</_PublishTargetUrl>
+    <History>True|2024-02-26T04:58:48.2153052Z;True|2024-02-25T02:36:58.5548744-05:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
